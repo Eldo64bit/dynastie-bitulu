@@ -72,11 +72,11 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 - [x] Ajouter les migrations et policies Supabase nécessaires pour les champs et le stockage privé.
 - [ ] Tester les parcours de sauvegarde, upload, suppression, mobile et déploiement GitHub Pages.
 - [ ] Publier immédiatement le checkpoint actuel sur GitHub Pages.
-- [ ] Publier la version 578dbac5 demandée sur GitHub Pages avant les nouvelles modifications.
-- [ ] Recentrer l’accueil sur le hero et les quatre principes, avec un bouton Invité vers l’archive publique dédiée.
-- [ ] Ajouter la prévisualisation du message WhatsApp avant la redirection finale.
-- [ ] Afficher les portraits réels dans les avatars près des noms.
-- [ ] Rendre Histoires utilisable : liste des contributions personnelles, dépôt DnD de texte, suggestion du titre et visibilité.
+- [x] Publier la version 578dbac5 demandée sur GitHub Pages avant les nouvelles modifications.
+- [x] Recentrer l’accueil sur le hero et les quatre principes, avec un bouton Invité vers l’archive publique dédiée.
+- [x] Ajouter la prévisualisation du message WhatsApp avant la redirection finale.
+- [x] Afficher les portraits réels dans les avatars près des noms.
+- [x] Rendre Histoires utilisable : liste des contributions personnelles, dépôt DnD de texte, suggestion du titre et visibilité.
 
 - [x] Corriger les colonnes avatar_url, biography, background_url et les autres champs de profil absents du cache de schéma, puis ajouter la suppression d’arrière-plan.
 - [x] Repenser l’invitation : identité, place dans l’arbre, téléphone et redirection wa.me avec message prérempli.
