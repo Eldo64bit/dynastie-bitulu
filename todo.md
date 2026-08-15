@@ -1,9 +1,21 @@
-# Correctif prioritaire — Dynastie BITULU
+# Initialisation réelle BITULU — état du 15 août 2026
 
-Le frontend n’affiche plus aucune donnée fictive : membres, compteurs, dates, histoires, albums et documents proviennent uniquement de Supabase. Lorsque la base est vide ou que le schéma est absent, l’interface affiche un état vide explicite et n’invente aucun contenu.
+- [x] Vérifier que le compte privé `bgloretienne1@gmail.com` existe dans le projet Supabase.
+- [x] Ne créer aucune donnée de démonstration.
+- [x] Créer les tables `family_units`, `profiles`, `events`, `stories` et `albums`.
+- [x] Créer la famille réelle `Dynastie BITULU`.
+- [x] Rattacher `bgloretienne1@gmail.com` comme premier SuperAdmin par son identifiant Auth réel.
+- [x] Ajouter le trigger de création de profil à l’inscription.
+- [x] Activer les règles RLS essentielles pour famille, profils et événements.
+- [x] Autoriser les visiteurs non connectés à lire uniquement les événements `PUBLIC`.
+- [x] Ajouter le prénom obligatoire au formulaire d’inscription et transmettre les métadonnées de profil à Supabase Auth.
+- [x] Ajouter la consultation publique des événements, récits et albums explicitement `PUBLIC`, avec état vide réel si aucun contenu n’existe.
+- [x] Valider `pnpm check` et `pnpm build`.
+- [x] Vérifier les compositions desktop et mobile ; aucune scrollbar visible n’apparaît dans la vue contrôlée.
 
-La base Supabase contrôlée est réellement vide au niveau des tables métier attendues : la requête de vérification a renvoyé l’erreur d’absence de `public.family_units`, confirmant que la migration n’a pas été appliquée et qu’aucun enregistrement de démonstration n’a été créé.
+## Limites restantes avant la production complète
 
-La politique mobile est appliquée globalement : overflow horizontal masqué, scrollbars natives invisibles dans les vues mobiles et drawer de navigation sans scrollbar visible. Aucun calendrier, checkbox ou select natif n’a été ajouté ; les contrôles utilisés sont des champs textuels personnalisés par le design de l’application.
-
-Le build TypeScript et la compilation de production passent. Le workflow GitHub Pages est vert. L’URL explicite `https://eldo64bit.github.io/dynastie-bitulu/index.html` et l’URL avec cache-buster servent correctement l’application. La route courte avec slash reste momentanément servie par une ancienne réponse CDN mise en cache ; le workflow publie désormais des alias de compatibilité pour les anciens hashes afin de laisser le CDN converger.
+- [ ] Ajouter les tables et RLS des documents et invitations lorsque l’interface de gestion sera implémentée.
+- [ ] Ajouter l’écran de complétion du profil pour le compte créé avant l’obligation du prénom.
+- [ ] Remplacer l’inscription publique ouverte par un parcours d’invitation contrôlé après validation du premier SuperAdmin.
+- [ ] Tester la création réelle d’un membre depuis le compte SuperAdmin, puis enregistrer un nouveau checkpoint.
