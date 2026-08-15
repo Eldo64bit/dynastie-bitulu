@@ -64,3 +64,13 @@ Le checkpoint `a185541c` a été poussé sur GitHub par le commit `a185541c869ad
 
 ## Correctif du nom affiché
 La policy `profile_read` contenait une récursion sur `profiles` qui empêchait la lecture fiable du profil par la session authentifiée. Elle a été remplacée par une policy directe `id = auth.uid()`, exécutée avec succès après confirmation. Le dashboard utilise désormais aussi les métadonnées Auth comme secours avant l’email. `pnpm check` et `pnpm build` passent.
+
+## Fonctionnalité profil membre
+- [ ] Inspecter Home.tsx, les helpers Supabase et le schéma existant pour identifier les points d’extension du tableau de bord.
+- [x] Définir les champs profil modifiables, la structure des téléphones et les règles d’accès aux médias.
+- [x] Implémenter l’écran de profil : identité, avatar, téléphones multiples et arrière-plan facultatif.
+- [x] Ajouter les migrations et policies Supabase nécessaires pour les champs et le stockage privé.
+- [ ] Tester les parcours de sauvegarde, upload, suppression, mobile et déploiement GitHub Pages.
+
+## Profil membre — implémentation en cours
+La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de lecture/écriture propres au membre, le bucket privé `profile-media` et les policies de fichiers limitées au dossier UUID de l’utilisateur. Le dashboard contient l’écran « Mon profil » avec identité, biographie, plusieurs téléphones, numéro principal, avatar et arrière-plan facultatif. `pnpm check` et `pnpm build` passent.
