@@ -52,3 +52,15 @@ La famille `Dynastie BITULU` existe bien et c’est l’unique ligne de `family_
 
 ## Correctif vérifié
 L’espace `Dynastie BITULU` est confirmé comme l’unique espace familial. Le compte `bgloretienne1@gmail.com` existe maintenant dans ce projet Supabase et son profil réel est rattaché avec le rôle `SUPERADMIN` et les quatre champs d’identité. Le refus de mémoire venait de l’absence totale de policy RLS sur `stories`; les policies d’insertion et de lecture ont été ajoutées. Le loader frontend n’interprète plus l’absence optionnelle de `documents` comme une base non installée, et le bouton d’invitation copie maintenant le lien réel de l’application. `pnpm check` et `pnpm build` passent.
+
+## Publication du correctif
+Le checkpoint `a185541c` a été poussé sur GitHub par le commit `a185541c869ad06b6b7d5d4eab839f3f25e09c45`. Le workflow GitHub Pages `31900319864` est terminé avec succès. La version live vérifiée est `https://eldo64bit.github.io/dynastie-bitulu/index.html?v=a185541`.
+
+## Publication immédiate et affichage du profil
+- [ ] Republier immédiatement l’état actuel sur GitHub Pages.
+- [ ] Diagnostiquer pourquoi la requête du profil réel ne produit pas le prénom dans la session frontend.
+- [ ] Afficher `Eldo Bitulu` ou `Etienne Stéphane Bitulu` selon la règle métier, sans fallback email lorsque le profil existe.
+- [ ] Republier et vérifier le correctif avec cache-buster.
+
+## Correctif du nom affiché
+La policy `profile_read` contenait une récursion sur `profiles` qui empêchait la lecture fiable du profil par la session authentifiée. Elle a été remplacée par une policy directe `id = auth.uid()`, exécutée avec succès après confirmation. Le dashboard utilise désormais aussi les métadonnées Auth comme secours avant l’email. `pnpm check` et `pnpm build` passent.
