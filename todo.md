@@ -35,3 +35,20 @@ La version de publication a été validée par `pnpm check` et `pnpm build`. Les
 ## Publication convention
 - [ ] Push the current validated commit to GitHub and trigger the GitHub Pages workflow when the user says « publier ».
 - [ ] Verify the deployed GitHub Pages artifact and effective public URL after the workflow completes.
+
+## Publication vérifiée
+La publication GitHub Pages a été déclenchée par le commit `0308d35` et le workflow `31899250069` s’est terminé avec succès. Le site répond publiquement sur `https://eldo64bit.github.io/dynastie-bitulu/index.html` ; la vérification a confirmé le titre et le contenu Dynastie BITULU servis par GitHub Pages.
+
+## Espace familial BITULU et mémoires
+- [ ] Vérifier l’existence réelle de l’espace `Dynastie BITULU` et le rattachement du profil d’Etienne.
+- [ ] Vérifier que le profil SuperAdmin est lisible par l’application avec la session actuelle.
+- [ ] Vérifier les colonnes, contraintes et RLS de `stories` utilisées par l’enregistrement d’une mémoire.
+- [ ] Corriger l’initialisation de famille et le message d’invitation disponible après création.
+- [ ] Corriger la création d’une mémoire sans données fictives.
+- [ ] Republier le correctif sur GitHub Pages et vérifier le parcours réel.
+
+## Audit réel
+La famille `Dynastie BITULU` existe bien et c’est l’unique ligne de `family_units`. En revanche, `auth.users` contient actuellement zéro compte et `public.profiles` contient zéro ligne ; l’identifiant utilisé précédemment ne correspondait donc à aucun utilisateur réel. Le refus de mémoire venait de l’absence de profil familial. Le trigger `handle_new_user` a maintenant été installé pour créer un profil réel et l’attacher automatiquement à l’unique famille BITULU lors d’un prochain signup.
+
+## Correctif vérifié
+L’espace `Dynastie BITULU` est confirmé comme l’unique espace familial. Le compte `bgloretienne1@gmail.com` existe maintenant dans ce projet Supabase et son profil réel est rattaché avec le rôle `SUPERADMIN` et les quatre champs d’identité. Le refus de mémoire venait de l’absence totale de policy RLS sur `stories`; les policies d’insertion et de lecture ont été ajoutées. Le loader frontend n’interprète plus l’absence optionnelle de `documents` comme une base non installée, et le bouton d’invitation copie maintenant le lien réel de l’application. `pnpm check` et `pnpm build` passent.
