@@ -27,6 +27,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
+      - name: Preserve cached bundle compatibility
+        run: |
+          current_js=$(find dist/public/assets -maxdepth 1 -name 'index-*.js' -print -quit)
+          cp "$current_js" dist/public/assets/index-C2SjQMho.js
+          cp "$current_js" dist/public/assets/index-CwkDu93x.js
       - name: Publish dist to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:

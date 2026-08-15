@@ -7,3 +7,7 @@
 - [ ] Remplacer les contrôles natifs utilisés par l’interface par des composants custom cohérents avec le design BITULU.
 - [ ] Diagnostiquer la 404 GitHub Pages et vérifier le contenu servi par le domaine public.
 - [ ] Recompiler, tester les parcours public/authentifié avec base vide, vérifier desktop/mobile, puis publier le correctif.
+
+## Verification finding
+- [x] Cache-busted URL `https://eldo64bit.github.io/dynastie-bitulu/?v=10fe47d` serves the real application.
+- [ ] Make the bare URL compatible with the CDN-cached old JavaScript asset by publishing a compatibility alias during Pages builds, then verify the bare URL again.
