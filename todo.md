@@ -31,3 +31,7 @@
 
 ## État courant
 La version de publication a été validée par `pnpm check` et `pnpm build`. Les champs réels d’Etienne sont enregistrés dans Supabase : prénom « Etienne Stéphane », nom « Bitulu », postnom « Kunyima Kabeya », surnom « Eldo ». L’interface affiche « Eldo Bitulu » lorsqu’un surnom existe, sinon « Prénom Nom ». Un slug public et une policy RLS dédiée sont en place pour les profils explicitement rendus publics ; le profil d’Etienne n’a pas été rendu public automatiquement.
+
+## Publication convention
+- [ ] Push the current validated commit to GitHub and trigger the GitHub Pages workflow when the user says « publier ».
+- [ ] Verify the deployed GitHub Pages artifact and effective public URL after the workflow completes.
