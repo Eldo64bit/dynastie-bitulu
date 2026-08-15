@@ -71,6 +71,17 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 - [x] Implémenter l’écran de profil : identité, avatar, téléphones multiples et arrière-plan facultatif.
 - [x] Ajouter les migrations et policies Supabase nécessaires pour les champs et le stockage privé.
 - [ ] Tester les parcours de sauvegarde, upload, suppression, mobile et déploiement GitHub Pages.
+- [ ] Publier immédiatement le checkpoint actuel sur GitHub Pages.
+- [x] Corriger les colonnes avatar_url, biography, background_url et les autres champs de profil absents du cache de schéma, puis ajouter la suppression d’arrière-plan.
+- [x] Repenser l’invitation : identité, place dans l’arbre, téléphone et redirection wa.me avec message prérempli.
+- [ ] Déplacer l’archive publique vers une vue dédiée accessible par un bouton Invité, sans l’afficher dans l’accueil principal.
+- [ ] Ajouter les CTA des sections Chronologie, Albums et Documents et les contrôles de visibilité sobres.
+- [x] Réparer les sauvegardes Supabase des champs biography, avatar_url et background_url après rafraîchissement du cache PostgREST.
+- [x] Ajouter un bouton de suppression d’arrière-plan et nettoyer les messages techniques d’erreur affichés aux membres.
+- [ ] Tester l’ouverture du wizard, le format international du téléphone et la redirection WhatsApp.
+
+- [ ] Retirer de l’interface les mentions techniques destinées uniquement au concepteur.
+
 
 ## Profil membre — implémentation en cours
 La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de lecture/écriture propres au membre, le bucket privé `profile-media` et les policies de fichiers limitées au dossier UUID de l’utilisateur. Le dashboard contient l’écran « Mon profil » avec identité, biographie, plusieurs téléphones, numéro principal, avatar et arrière-plan facultatif. `pnpm check` et `pnpm build` passent.

@@ -1,7 +1,10 @@
 -- Dynastie BITULU — profile settings and private profile media
 -- Idempotent migration for the existing Supabase project.
 
+alter table public.profiles add column if not exists avatar_url text;
 alter table public.profiles add column if not exists background_url text;
+alter table public.profiles add column if not exists biography text;
+alter table public.profiles add column if not exists phone text;
 alter table public.profiles add column if not exists post_name text;
 alter table public.profiles add column if not exists nickname text;
 
