@@ -30,8 +30,10 @@ jobs:
       - name: Preserve cached bundle compatibility
         run: |
           current_js=$(ls dist/public/assets/index-*.js | head -n 1)
-          cp "$current_js" dist/public/assets/index-C2SjQMho.js
-          cp "$current_js" dist/public/assets/index-CwkDu93x.js
+          for alias in index-C2SjQMho.js index-CwkDu93x.js; do
+            target="dist/public/assets/$alias"
+            if [ "$current_js" != "$target" ]; then cp "$current_js" "$target"; fi
+          done
       - name: Publish dist to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
