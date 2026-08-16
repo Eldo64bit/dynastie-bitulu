@@ -93,6 +93,7 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 - [x] Créer la table `documents` manquante dans Supabase avec RLS, puis vérifier l’import de document réel.
 
 
+- [ ] Corriger le débordement horizontal de la prévisualisation WhatsApp sur petit écran.
 - [ ] Republier sur GitHub Pages et vérifier le flux d’invitation WhatsApp en ligne.
 
 - [x] Rendre les tags de visibilité cliquables pour l’auteur et ajouter le ciblage de membres précis.
