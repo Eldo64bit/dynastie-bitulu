@@ -80,7 +80,14 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 
 - [x] Corriger les colonnes avatar_url, biography, background_url et les autres champs de profil absents du cache de schéma, puis ajouter la suppression d’arrière-plan.
 - [x] Repenser l’invitation : identité, place dans l’arbre, téléphone et redirection wa.me avec message prérempli.
-- [ ] Déplacer l’archive publique vers une vue dédiée accessible par un bouton Invité, sans l’afficher dans l’accueil principal.
+- [x] Transformer l’accès Invité en véritable vitrine publique dédiée, en lecture seule, avec menus proches de l’espace membre et livre d’or.
+- [x] Réparer la sélection visuelle des tuiles de rôle dans le wizard d’invitation et diagnostiquer l’erreur de préparation Supabase.
+- [ ] Ajouter une prévisualisation claire et un enregistrement fiable de l’invitation avant WhatsApp.
+- [x] Rendre les tags de visibilité cliquables pour l’auteur et ajouter le ciblage de membres précis.
+- [x] Implémenter les CTA Créer un album, Ajouter un document et les imports associés.
+- [x] Afficher l’arrière-plan de profil dans la fiche membre et les surfaces prévues.
+- [x] Ajouter un livre d’or public en lecture seule côté membres, avec modération avant publication.
+
 - [ ] Ajouter les CTA des sections Chronologie, Albums et Documents et les contrôles de visibilité sobres.
 - [x] Réparer les sauvegardes Supabase des champs biography, avatar_url et background_url après rafraîchissement du cache PostgREST.
 - [x] Ajouter un bouton de suppression d’arrière-plan et nettoyer les messages techniques d’erreur affichés aux membres.

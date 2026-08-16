@@ -385,3 +385,36 @@ drop policy if exists "profile media update own" on storage.objects;
 create policy "profile media update own" on storage.objects for update to authenticated using (bucket_id = 'profile-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'profile-media' and (storage.foldername(name))[1] = auth.uid()::text);
 drop policy if exists "profile media delete own" on storage.objects;
 create policy "profile media delete own" on storage.objects for delete to authenticated using (bucket_id = 'profile-media' and (storage.foldername(name))[1] = auth.uid()::text);
+
+
+-- Public vitrine, invitations, targeted visibility and private family media
+alter table public.invitations add column if not exists invitee_first_name text;
+alter table public.invitations add column if not exists invitee_last_name text;
+create table if not exists public.content_access (
+  id uuid primary key default gen_random_uuid(), content_kind text not null, content_id uuid not null,
+  profile_id uuid not null references public.profiles(id) on delete cascade,
+  granted_by uuid not null references auth.users(id) on delete cascade, created_at timestamptz not null default now(),
+  unique(content_kind, content_id, profile_id)
+);
+alter table public.content_access enable row level security;
+drop policy if exists "content access own read" on public.content_access;
+create policy "content access own read" on public.content_access for select to authenticated using (granted_by = auth.uid() or profile_id = auth.uid());
+drop policy if exists "content access own write" on public.content_access;
+create policy "content access own write" on public.content_access for all to authenticated using (granted_by = auth.uid()) with check (granted_by = auth.uid());
+create table if not exists public.guestbook_entries (
+  id uuid primary key default gen_random_uuid(), family_unit_id uuid references public.family_units(id) on delete cascade,
+  display_name text not null, message text not null, status text not null default 'PENDING',
+  moderated_by uuid references auth.users(id) on delete set null, created_at timestamptz not null default now()
+);
+alter table public.guestbook_entries enable row level security;
+drop policy if exists "approved guestbook public read" on public.guestbook_entries;
+create policy "approved guestbook public read" on public.guestbook_entries for select using (status = 'APPROVED');
+drop policy if exists "guestbook public submit" on public.guestbook_entries;
+create policy "guestbook public submit" on public.guestbook_entries for insert to anon, authenticated with check (status = 'PENDING');
+drop policy if exists "guestbook moderator update" on public.guestbook_entries;
+create policy "guestbook moderator update" on public.guestbook_entries for update to authenticated using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('SUPERADMIN','FAMILY_NETWORK'))) with check (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('SUPERADMIN','FAMILY_NETWORK')));
+insert into storage.buckets (id, name, public) values ('family-media','family-media',false) on conflict (id) do nothing;
+drop policy if exists "family media own read" on storage.objects;
+create policy "family media own read" on storage.objects for select to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "family media own write" on storage.objects;
+create policy "family media own write" on storage.objects for all to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
