@@ -109,3 +109,8 @@ create policy "family media delete own" on storage.objects for delete to authent
 
 -- Album imports use an optional cover image path.
 alter table public.albums add column if not exists cover_url text;
+
+-- Shared album photo captions and manual ordering.
+alter table public.media add column if not exists caption text;
+alter table public.media add column if not exists sort_order integer not null default 0;
+create index if not exists media_album_sort_order_idx on public.media(album_id, sort_order, created_at);

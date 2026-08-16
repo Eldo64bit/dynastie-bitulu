@@ -161,3 +161,10 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Remplacer les labels et boutons d’ajout photo par une zone visuelle « + » acceptant le glisser-déposer.
 - [x] Charger et afficher les photos existantes dans chaque album.
 - [ ] Tester puis pousser la correction finale sur GitHub Pages.
+
+## Albums, documents et coordonnées — nouvelle UX
+- [x] Ajouter suppression facile des photos, réorganisation de l’ordre et édition des légendes.
+- [x] Afficher une progression ou animation claire pendant l’upload photo.
+- [x] Aligner le module documents privés sur l’UX des photos.
+- [x] Supprimer les anciens champs de coordonnées redondants au-dessus de « Libellé · Numéro ».
+- [x] Tester, créer un checkpoint et publier la version corrigée.
