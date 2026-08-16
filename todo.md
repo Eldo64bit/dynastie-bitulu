@@ -182,3 +182,8 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [ ] Vérifier la configuration GitHub Pages et les branches distantes.
 - [ ] Publier la version courante uniquement sur main.
 - [ ] Supprimer gh-pages si elle sert uniquement au déploiement et vérifier Pages depuis main.
+
+## Finalisation main uniquement
+- [x] Vérifier que GitHub Pages utilise GitHub Actions depuis main.
+- [x] Supprimer la branche distante gh-pages après validation du nouveau déploiement.
+- [x] Vérifier que main est la seule branche de publication et que le site reste accessible.
