@@ -71,3 +71,25 @@ create policy "family media own read" on storage.objects for select to authentic
 drop policy if exists "family media own write" on storage.objects;
 create policy "family media own write" on storage.objects for all to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
 notify pgrst, 'reload schema';
+
+
+create table if not exists public.profile_contact_points (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references public.profiles(id) on delete cascade,
+  kind text not null check (kind in ('EMAIL','PHONE','WEBSITE','INSTAGRAM','FACEBOOK','LINKEDIN','WHATSAPP','OTHER')),
+  label text not null default 'Contact',
+  value text not null,
+  visibility public.visibility_level not null default 'PRIVATE',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists profile_contact_points_profile_id_idx on public.profile_contact_points(profile_id);
+alter table public.profile_contact_points enable row level security;
+drop policy if exists "contact points read own" on public.profile_contact_points;
+create policy "contact points read own" on public.profile_contact_points for select to authenticated using (profile_id = auth.uid());
+drop policy if exists "contact points insert own" on public.profile_contact_points;
+create policy "contact points insert own" on public.profile_contact_points for insert to authenticated with check (profile_id = auth.uid());
+drop policy if exists "contact points update own" on public.profile_contact_points;
+create policy "contact points update own" on public.profile_contact_points for update to authenticated using (profile_id = auth.uid()) with check (profile_id = auth.uid());
+drop policy if exists "contact points delete own" on public.profile_contact_points;
+create policy "contact points delete own" on public.profile_contact_points for delete to authenticated using (profile_id = auth.uid());

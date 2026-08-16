@@ -135,3 +135,11 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Ajouter la visibilité dédiée aux coordonnées dans « Ma confidentialité ».
 - [x] Étendre les coordonnées privées aux emails, réseaux sociaux et autres moyens de contact.
 - [ ] Tester les parcours complets, créer un checkpoint et publier la correction.
+
+## Nouvelle série — migration Supabase, photos d’albums et renvoi
+- [ ] Publier immédiatement la version actuelle avant les nouvelles extensions.
+- [x] Appliquer réellement les colonnes et policies Supabase pour `revoked_at` et les contacts.
+- [x] Ajouter un bouton « Renvoyer » dans le détail d’une invitation sans créer de doublon.
+- [x] Ajouter les photos individuelles dans les albums partagés.
+- [x] Permettre plusieurs emails, sites et réseaux sociaux avec une visibilité indépendante par entrée.
+- [ ] Tester la migration, les imports, le renvoi et créer un checkpoint final.
