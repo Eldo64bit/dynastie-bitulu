@@ -177,3 +177,8 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Ajouter un tag de visibilité modifiable à tous les éléments concernés.
 - [x] Réparer la persistance réelle de la visibilité des histoires et synchroniser leur icône avec la valeur Supabase.
 - [ ] Tester puis publier la correction finale.
+
+## Publication GitHub — branche unique main
+- [ ] Vérifier la configuration GitHub Pages et les branches distantes.
+- [ ] Publier la version courante uniquement sur main.
+- [ ] Supprimer gh-pages si elle sert uniquement au déploiement et vérifier Pages depuis main.
