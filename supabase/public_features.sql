@@ -19,9 +19,19 @@ drop policy if exists "own invitations" on public.invitations;
 create policy "own invitations" on public.invitations for select using (inviter_id = auth.uid());
 drop policy if exists "create invitations" on public.invitations;
 create policy "create invitations" on public.invitations for insert with check (inviter_id = auth.uid());
+drop policy if exists "update own invitations" on public.invitations;
+create policy "update own invitations" on public.invitations for update using (inviter_id = auth.uid()) with check (inviter_id = auth.uid());
 alter table public.invitations add column if not exists invitee_first_name text;
 alter table public.invitations add column if not exists invitee_last_name text;
 alter table public.invitations add column if not exists sent_at timestamptz;
+alter table public.invitations add column if not exists revoked_at timestamptz;
+alter table public.profiles add column if not exists contact_visibility public.visibility_level not null default 'PRIVATE';
+alter table public.profiles add column if not exists website_url text;
+alter table public.profiles add column if not exists instagram_url text;
+alter table public.profiles add column if not exists facebook_url text;
+alter table public.profiles add column if not exists linkedin_url text;
+alter table public.profiles add column if not exists whatsapp_url text;
+alter table public.profiles add column if not exists other_contact text;
 
 create table if not exists public.content_access (
   id uuid primary key default gen_random_uuid(),

@@ -126,3 +126,12 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Remplacer les cards linéaires par un véritable arbre généalogique avec générations, embranchements et positions relationnelles.
 - [x] Ajouter un filtre pour afficher ou masquer les invitations en attente dans l’arbre.
 - [ ] Tester et publier la nouvelle structure de l’arbre et du wizard.
+
+## Nouvelle série — arbre interactif, invitations et confidentialité des coordonnées
+- [x] Permettre à l’auteur de révoquer une invitation en attente depuis l’arbre.
+- [x] Rendre les tuiles de l’arbre cliquables : profil détaillé pour un membre confirmé et détail/édition pour une invitation en attente.
+- [x] Corriger la sauvegarde de visibilité signalée dans la capture, avec retour d’erreur exploitable.
+- [x] Corriger les imports albums/documents signalés dans la capture, avec gestion fiable du stockage et des enregistrements.
+- [x] Ajouter la visibilité dédiée aux coordonnées dans « Ma confidentialité ».
+- [x] Étendre les coordonnées privées aux emails, réseaux sociaux et autres moyens de contact.
+- [ ] Tester les parcours complets, créer un checkpoint et publier la correction.
