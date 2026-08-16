@@ -201,3 +201,10 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Valider TypeScript, build et aperçu.
 - [x] Créer le checkpoint puis publier `main` sur GitHub Pages.
 
+
+## Vitrine invitée — filtre photos publiques — 2026-08-16
+- [x] Inspecter le chargement des médias publics dans la vitrine.
+- [x] Ajouter un filtre dédié aux photos publiques réellement accessibles.
+- [x] Vérifier l’affichage invité, TypeScript et le build.
+- [ ] Créer un checkpoint de la fonctionnalité.
+
