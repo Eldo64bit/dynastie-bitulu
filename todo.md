@@ -168,3 +168,12 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Aligner le module documents privés sur l’UX des photos.
 - [x] Supprimer les anciens champs de coordonnées redondants au-dessus de « Libellé · Numéro ».
 - [x] Tester, créer un checkpoint et publier la version corrigée.
+
+## Livre d’or, documents et visibilité — nouvelle correction
+- [ ] Pousser immédiatement l’état actuel sur GitHub Pages.
+- [x] Faire apparaître les contributions du livre d’or invité dans l’espace de confidentialité/modération approprié.
+- [x] Rendre les documents publics visibles dans la vitrine invitée.
+- [x] Ajouter modification, suppression et tag de visibilité aux documents.
+- [x] Ajouter un tag de visibilité modifiable à tous les éléments concernés.
+- [x] Réparer la persistance réelle de la visibilité des histoires et synchroniser leur icône avec la valeur Supabase.
+- [ ] Tester puis publier la correction finale.

@@ -114,3 +114,7 @@ alter table public.albums add column if not exists cover_url text;
 alter table public.media add column if not exists caption text;
 alter table public.media add column if not exists sort_order integer not null default 0;
 create index if not exists media_album_sort_order_idx on public.media(album_id, sort_order, created_at);
+
+-- Moderators can read pending guestbook entries; public documents expose only their own storage objects.
+create policy "guestbook moderator read" on public.guestbook_entries for select to authenticated using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('SUPERADMIN','FAMILY_NETWORK')));
+create policy "public document storage read" on storage.objects for select to anon, authenticated using (bucket_id = 'family-media' and exists (select 1 from public.documents d where d.storage_path = name and d.visibility = 'PUBLIC'));
