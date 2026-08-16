@@ -187,3 +187,10 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Vérifier que GitHub Pages utilise GitHub Actions depuis main.
 - [x] Supprimer la branche distante gh-pages après validation du nouveau déploiement.
 - [x] Vérifier que main est la seule branche de publication et que le site reste accessible.
+
+## Correctif erreur de sauvegarde — 2026-08-16
+- [x] Inspecter la fonction `save` autour de Home.tsx:1189 et les journaux navigateur.
+- [x] Corriger la cause de l’échec de sauvegarde et rendre le message d’erreur lisible.
+- [x] Vérifier TypeScript, build de production et parcours concerné.
+- [x] Créer un checkpoint de la correction.
+
