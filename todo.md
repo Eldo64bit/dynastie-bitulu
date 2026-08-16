@@ -143,3 +143,10 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Ajouter les photos individuelles dans les albums partagés.
 - [x] Permettre plusieurs emails, sites et réseaux sociaux avec une visibilité indépendante par entrée.
 - [ ] Tester la migration, les imports, le renvoi et créer un checkpoint final.
+
+## Publication immédiate puis corrections
+- [x] Pousser immédiatement le checkpoint actuel sur GitHub pour déclencher GitHub Pages.
+- [x] Diagnostiquer et corriger le problème persistant des imports albums/documents.
+- [x] Remplacer les libellés de réseaux dans les coordonnées privées par des logos ou icônes explicites.
+- [x] Supprimer la redondance entre la section « Coordonnées » et « Coordonnées privées » en conservant une seule occurrence.
+- [ ] Tester puis pousser la correction finale sur GitHub Pages.

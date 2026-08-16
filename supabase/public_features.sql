@@ -93,3 +93,16 @@ drop policy if exists "contact points update own" on public.profile_contact_poin
 create policy "contact points update own" on public.profile_contact_points for update to authenticated using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 drop policy if exists "contact points delete own" on public.profile_contact_points;
 create policy "contact points delete own" on public.profile_contact_points for delete to authenticated using (profile_id = auth.uid());
+
+
+alter table public.albums enable row level security;
+drop policy if exists "own albums" on public.albums;
+create policy "own albums" on public.albums for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+drop policy if exists "family media read own" on storage.objects;
+create policy "family media read own" on storage.objects for select to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "family media upload own" on storage.objects;
+create policy "family media upload own" on storage.objects for insert to authenticated with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "family media update own" on storage.objects;
+create policy "family media update own" on storage.objects for update to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "family media delete own" on storage.objects;
+create policy "family media delete own" on storage.objects for delete to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
