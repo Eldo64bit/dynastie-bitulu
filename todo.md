@@ -118,3 +118,11 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 
 ## Profil membre — implémentation en cours
 La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de lecture/écriture propres au membre, le bucket privé `profile-media` et les policies de fichiers limitées au dossier UUID de l’utilisateur. Le dashboard contient l’écran « Mon profil » avec identité, biographie, plusieurs téléphones, numéro principal, avatar et arrière-plan facultatif. `pnpm check` et `pnpm build` passent.
+
+## Nouvelle refonte — wizard et arbre généalogique
+- [x] Nettoyer complètement l’étape 3 du wizard : masquer tous les champs et contrôles de l’étape 2.
+- [x] Ne retenir dans l’arbre que les invitations dont l’envoi WhatsApp a réellement été déclenché.
+- [x] Afficher les invitations en attente avec une légère couleur d’accent et le texte « Invitation en attente » uniquement.
+- [x] Remplacer les cards linéaires par un véritable arbre généalogique avec générations, embranchements et positions relationnelles.
+- [x] Ajouter un filtre pour afficher ou masquer les invitations en attente dans l’arbre.
+- [ ] Tester et publier la nouvelle structure de l’arbre et du wizard.

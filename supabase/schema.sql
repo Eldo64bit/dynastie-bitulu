@@ -170,6 +170,8 @@ create table if not exists public.invitations (
   created_at timestamptz not null default now()
 );
 
+alter table public.invitations add column if not exists sent_at timestamptz;
+
 create table if not exists public.notifications (
   id uuid primary key default gen_random_uuid(),
   recipient_id uuid not null references auth.users(id) on delete cascade,

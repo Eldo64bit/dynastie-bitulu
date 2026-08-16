@@ -21,6 +21,7 @@ drop policy if exists "create invitations" on public.invitations;
 create policy "create invitations" on public.invitations for insert with check (inviter_id = auth.uid());
 alter table public.invitations add column if not exists invitee_first_name text;
 alter table public.invitations add column if not exists invitee_last_name text;
+alter table public.invitations add column if not exists sent_at timestamptz;
 
 create table if not exists public.content_access (
   id uuid primary key default gen_random_uuid(),
