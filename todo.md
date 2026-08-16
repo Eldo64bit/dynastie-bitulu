@@ -155,3 +155,9 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Diagnostiquer l’erreur `[object Object]` déclenchée dans `Home.tsx` autour de la ligne 2779.
 - [x] Afficher une erreur Supabase lisible et corriger la cause de sauvegarde.
 - [x] Vérifier le parcours concerné, le build et créer un checkpoint.
+
+## Photos d’albums — zone DnD et affichage
+- [ ] Pousser immédiatement le checkpoint actuel sur GitHub Pages.
+- [x] Remplacer les labels et boutons d’ajout photo par une zone visuelle « + » acceptant le glisser-déposer.
+- [x] Charger et afficher les photos existantes dans chaque album.
+- [ ] Tester puis pousser la correction finale sur GitHub Pages.
