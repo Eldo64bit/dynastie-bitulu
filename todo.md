@@ -199,5 +199,5 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Inspecter l’affichage et la sauvegarde de visibilité des photos d’albums.
 - [x] Ajouter un tag de visibilité cliquable aux photos appartenant à l’utilisateur.
 - [x] Valider TypeScript, build et aperçu.
-- [ ] Créer le checkpoint puis publier `main` sur GitHub Pages.
+- [x] Créer le checkpoint puis publier `main` sur GitHub Pages.
 
