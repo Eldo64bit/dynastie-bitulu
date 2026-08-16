@@ -82,7 +82,19 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 - [x] Repenser l’invitation : identité, place dans l’arbre, téléphone et redirection wa.me avec message prérempli.
 - [x] Transformer l’accès Invité en véritable vitrine publique dédiée, en lecture seule, avec menus proches de l’espace membre et livre d’or.
 - [x] Réparer la sélection visuelle des tuiles de rôle dans le wizard d’invitation et diagnostiquer l’erreur de préparation Supabase.
-- [ ] Ajouter une prévisualisation claire et un enregistrement fiable de l’invitation avant WhatsApp.
+- [x] Ajouter une prévisualisation claire et un enregistrement fiable de l’invitation avant WhatsApp.
+- [x] Retirer de la vitrine les mentions internes « lecture seule », « vue publique » et autres libellés destinés au concepteur.
+- [x] Retirer « Invité » du CTA haut droit de l’accueil principal.
+- [x] Ajouter le formulaire de dépôt du livre d’or et l’interface de modération SuperAdmin/réseau familial.
+- [x] Ajouter recherche et filtres aux rubriques de la vitrine publique.
+- [x] Remplacer le point du tag de visibilité par une icône explicite avec infobulle.
+- [x] Corriger les erreurs d’import album/document et le layout de prévisualisation WhatsApp.
+- [x] Créer la table `media` manquante dans Supabase avec RLS, puis vérifier l’import d’album réel.
+- [x] Créer la table `documents` manquante dans Supabase avec RLS, puis vérifier l’import de document réel.
+
+
+- [ ] Republier sur GitHub Pages et vérifier le flux d’invitation WhatsApp en ligne.
+
 - [x] Rendre les tags de visibilité cliquables pour l’auteur et ajouter le ciblage de membres précis.
 - [x] Implémenter les CTA Créer un album, Ajouter un document et les imports associés.
 - [x] Afficher l’arrière-plan de profil dans la fiche membre et les surfaces prévues.

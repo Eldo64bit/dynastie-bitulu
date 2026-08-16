@@ -418,3 +418,13 @@ drop policy if exists "family media own read" on storage.objects;
 create policy "family media own read" on storage.objects for select to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
 drop policy if exists "family media own write" on storage.objects;
 create policy "family media own write" on storage.objects for all to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- Import support repair: real media and private document records
+create table if not exists public.media (id uuid primary key default gen_random_uuid(), family_unit_id uuid references public.family_units(id) on delete cascade, owner_id uuid not null references auth.users(id) on delete cascade, album_id uuid references public.albums(id) on delete cascade, storage_path text not null, media_type text, title text, visibility text not null default 'PRIVATE', created_at timestamptz not null default now());
+alter table public.media enable row level security;
+drop policy if exists "own media" on public.media;
+create policy "own media" on public.media for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+create table if not exists public.documents (id uuid primary key default gen_random_uuid(), family_unit_id uuid references public.family_units(id) on delete cascade, owner_id uuid not null references auth.users(id) on delete cascade, document_type text not null default 'OTHER', title text not null, storage_path text not null, mime_type text, visibility text not null default 'PRIVATE', created_at timestamptz not null default now());
+alter table public.documents enable row level security;
+drop policy if exists "own documents" on public.documents;
+create policy "own documents" on public.documents for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
