@@ -150,3 +150,8 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Remplacer les libellés de réseaux dans les coordonnées privées par des logos ou icônes explicites.
 - [x] Supprimer la redondance entre la section « Coordonnées » et « Coordonnées privées » en conservant une seule occurrence.
 - [ ] Tester puis pousser la correction finale sur GitHub Pages.
+
+## Correction — erreur de sauvegarde opaque
+- [x] Diagnostiquer l’erreur `[object Object]` déclenchée dans `Home.tsx` autour de la ligne 2779.
+- [x] Afficher une erreur Supabase lisible et corriger la cause de sauvegarde.
+- [x] Vérifier le parcours concerné, le build et créer un checkpoint.

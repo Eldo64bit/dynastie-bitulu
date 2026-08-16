@@ -106,3 +106,6 @@ drop policy if exists "family media update own" on storage.objects;
 create policy "family media update own" on storage.objects for update to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
 drop policy if exists "family media delete own" on storage.objects;
 create policy "family media delete own" on storage.objects for delete to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- Album imports use an optional cover image path.
+alter table public.albums add column if not exists cover_url text;
