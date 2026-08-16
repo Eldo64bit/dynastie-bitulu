@@ -93,7 +93,14 @@ La policy `profile_read` contenait une récursion sur `profiles` qui empêchait 
 - [x] Créer la table `documents` manquante dans Supabase avec RLS, puis vérifier l’import de document réel.
 
 
-- [ ] Corriger le débordement horizontal de la prévisualisation WhatsApp sur petit écran.
+- [x] Corriger le débordement horizontal de la prévisualisation WhatsApp sur petit écran.
+- [x] Retirer uniquement « Accès membre · visibilité contrôlée » de l’accueil principal, sans autre changement de composition.
+- [x] Recomposer la troisième étape WhatsApp, ajouter une barre de progression et un bouton de copie du message.
+- [x] Ajouter progression et messages de succès aux imports albums/documents.
+- [x] Ajouter une alerte d’administration lors d’un nouveau message du livre d’or.
+- [x] Afficher les invitations envoyées comme membres en attente dans l’arbre.
+- [x] Réparer la persistance réelle de la visibilité choisie par l’auteur.
+
 - [ ] Republier sur GitHub Pages et vérifier le flux d’invitation WhatsApp en ligne.
 
 - [x] Rendre les tags de visibilité cliquables pour l’auteur et ajouter le ciblage de membres précis.
