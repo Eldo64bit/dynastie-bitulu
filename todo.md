@@ -226,3 +226,17 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Valider TypeScript, le build et l’aperçu de l’accueil ainsi que le parcours URL d’invitation.
 - [ ] Créer le checkpoint de cette correction.
 
+
+## Synchronisation live, aperçu de l’arbre et slider — 2026-08-17
+- [ ] Auditer le chargement de l’arbre, les relations et les dépendances à `localStorage`.
+- [ ] Corriger le chargement live des membres et des contenus sans cache local abusif.
+- [ ] Ajouter un aperçu de l’arbre selon un autre membre avec sélection explicite.
+- [ ] Fluidifier le slider d’opacité et afficher sa valeur immédiatement pendant le réglage.
+- [ ] Valider le multi-utilisateur, le build et créer un checkpoint.
+
+
+## Synchronisation live, aperçu de l’arbre et slider — validation
+La policy `family profiles read` a été restaurée dans Supabase : les profils des huit comptes de la famille BITULU sont désormais lisibles par les autres membres autorisés. Le dashboard ne s’appuie plus sur `localStorage` pour décider quelles invitations ont été envoyées ; seul `invitations.sent_at` est utilisé. Les médias familiaux sont chargés depuis Supabase avec le rattachement de famille. L’arbre possède un sélecteur de point de vue par membre, et le slider d’opacité anime sa piste, son curseur et l’aperçu d’image en temps réel. `pnpm check`, `pnpm build` et l’aperçu passent.
+
+- [ ] Créer le checkpoint de cette correction.
+

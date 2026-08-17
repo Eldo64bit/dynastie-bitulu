@@ -472,6 +472,8 @@ create policy "profile phone delete own" on public.profile_phone_numbers for del
 
 drop policy if exists "profile update own" on public.profiles;
 create policy "profile update own" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
+drop policy if exists "family profiles read" on public.profiles;
+create policy "family profiles read" on public.profiles for select to authenticated using (exists (select 1 from public.profiles viewer where viewer.id = auth.uid() and viewer.family_unit_id is not null and viewer.family_unit_id = profiles.family_unit_id));
 
 insert into storage.buckets (id, name, public) values ('profile-media', 'profile-media', false) on conflict (id) do update set public = false;
 
