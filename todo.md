@@ -297,3 +297,6 @@ Validation terminée : la notification d’arrivée charge l’avatar Supabase s
 - [ ] Ajouter le réagencement Drag&Drop des membres réservé au superadmin.
 - [ ] Valider et republier la version finale.
 
+
+Validation : la valeur affichée du slider est revenue à l’unité tandis que le pas interne reste de 0,0001 %. La fiche membre affiche maintenant le portrait signé, les informations disponibles et les fragments partagés. L’édition profil conserve l’avatar, l’arrière-plan et l’aperçu direct d’opacité. Le Drag&Drop est limité au superadmin, persiste `tree_order` et est borné à sa famille. TypeScript, build et aperçu passent.
+

@@ -20,6 +20,7 @@ create table if not exists public.family_units (
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   family_unit_id uuid references public.family_units(id) on delete set null,
+  tree_order integer not null default 0,
   first_name text not null default '',
   last_name text not null default '',
   display_name text generated always as (trim(first_name || ' ' || last_name)) stored,
@@ -391,6 +392,7 @@ grant execute on function public.ensure_family_membership() to authenticated;
 
 alter table public.family_units enable row level security;
 alter table public.profiles enable row level security;
+alter table public.profiles add column if not exists tree_order integer not null default 0;
 alter table public.family_relationships enable row level security;
 alter table public.events enable row level security;
 alter table public.event_people enable row level security;
@@ -508,6 +510,14 @@ drop policy if exists "profile update own" on public.profiles;
 create policy "profile update own" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
 drop policy if exists "family profiles read" on public.profiles;
 create policy "family profiles read" on public.profiles for select to authenticated using (public.is_member_of_family(family_unit_id));
+create or replace function public.is_superadmin()
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.profiles where id = auth.uid() and role = 'SUPERADMIN');
+$$;
+revoke all on function public.is_superadmin() from public;
+grant execute on function public.is_superadmin() to authenticated;
+drop policy if exists "profile tree order superadmin" on public.profiles;
+create policy "profile tree order superadmin" on public.profiles for update to authenticated using (public.is_superadmin() and public.is_member_of_family(family_unit_id)) with check (public.is_superadmin() and public.is_member_of_family(family_unit_id));
 
 insert into storage.buckets (id, name, public) values ('profile-media', 'profile-media', false) on conflict (id) do update set public = false;
 
