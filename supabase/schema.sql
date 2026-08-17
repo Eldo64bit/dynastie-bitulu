@@ -174,6 +174,9 @@ alter table public.invitations add column if not exists sent_at timestamptz;
 alter table public.invitations add column if not exists revoked_at timestamptz;
 alter table public.invitations add column if not exists accepted_by uuid references auth.users(id) on delete set null;
 alter table public.invitations add column if not exists accepted_at timestamptz;
+update public.invitations i set family_unit_id = p.family_unit_id from public.profiles p where i.family_unit_id is null and i.inviter_id = p.id and p.family_unit_id is not null;
+alter table public.invitations alter column family_unit_id set not null;
+alter table public.profiles alter column family_unit_id set not null;
 alter table public.profiles add column if not exists background_opacity numeric not null default 0.18 check (background_opacity between 0.05 and 0.8);
 
 alter table public.profiles add column if not exists contact_visibility public.visibility_level not null default 'PRIVATE';
@@ -264,11 +267,40 @@ $$;
 
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
+declare
+  target_family_id uuid;
+  invitation_family_id uuid;
+  requested_family_id uuid;
+  family_count integer;
 begin
-  insert into public.profiles (id, first_name, last_name, email) values (new.id, coalesce(new.raw_user_meta_data->>'first_name',''), coalesce(new.raw_user_meta_data->>'last_name',''), new.email) on conflict (id) do nothing;
+  begin requested_family_id := nullif(new.raw_user_meta_data->>'family_unit_id','')::uuid; exception when others then requested_family_id := null; end;
+  select i.family_unit_id into invitation_family_id from public.invitations i where i.token = nullif(new.raw_user_meta_data->>'invitation_token','') and i.status = 'PENDING' and i.revoked_at is null and i.expires_at > now() limit 1;
+  target_family_id := coalesce(invitation_family_id, requested_family_id);
+  if target_family_id is null then
+    select count(*), min(id) into family_count, target_family_id from public.family_units;
+    if family_count <> 1 then raise exception 'FAMILY_INVITATION_REQUIRED'; end if;
+  end if;
+  insert into public.profiles (id, family_unit_id, first_name, last_name, post_name, nickname, email, role)
+    values (new.id, target_family_id, coalesce(new.raw_user_meta_data->>'first_name',''), coalesce(new.raw_user_meta_data->>'last_name',''), nullif(new.raw_user_meta_data->>'post_name',''), nullif(new.raw_user_meta_data->>'nickname',''), new.email, coalesce(nullif(new.raw_user_meta_data->>'role','')::public.app_role, 'FAMILY_NETWORK'::public.app_role))
+    on conflict (id) do update set family_unit_id = coalesce(public.profiles.family_unit_id, excluded.family_unit_id), updated_at = now();
   return new;
 end;
 $$;
+
+create or replace function public.normalize_invitation_family()
+returns trigger language plpgsql security definer set search_path = public as $$
+declare inviter_family_id uuid;
+begin
+  select family_unit_id into inviter_family_id from public.profiles where id = new.inviter_id;
+  if inviter_family_id is null then raise exception 'INVITER_FAMILY_REQUIRED'; end if;
+  if new.family_unit_id is null then new.family_unit_id := inviter_family_id; end if;
+  if new.family_unit_id <> inviter_family_id then raise exception 'INVITATION_FAMILY_MISMATCH'; end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists normalize_invitation_family_trigger on public.invitations;
+create trigger normalize_invitation_family_trigger before insert or update of family_unit_id, inviter_id on public.invitations for each row execute procedure public.normalize_invitation_family();
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();

@@ -32,9 +32,10 @@ function LoginDialog({ open, onOpenChange, onGuest }: { open: boolean; onOpenCha
     event.preventDefault();
     if (mode === 'signup' && !firstName.trim()) { toast.error('Le prénom est requis pour créer votre profil.'); return; }
     setLoading(true);
+    const invitationToken = new URLSearchParams(window.location.search).get('invitation');
     const result = mode === 'login'
       ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password, options: { data: { first_name: firstName.trim(), last_name: lastName.trim(), post_name: postName.trim(), nickname: nickname.trim() } } });
+      : await supabase.auth.signUp({ email, password, options: { data: { first_name: firstName.trim(), last_name: lastName.trim(), post_name: postName.trim(), nickname: nickname.trim(), invitation_token: invitationToken || undefined } } });
     setLoading(false);
     if (result.error) { toast.error(result.error.message); return; }
     toast.success(mode === 'login' ? 'Votre archive est ouverte.' : 'Compte créé. Vérifiez votre email si nécessaire.');

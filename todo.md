@@ -245,3 +245,26 @@ La policy `family profiles read` a été restaurée dans Supabase : les profils 
 - [ ] Pousser le checkpoint validé sur `main`.
 - [ ] Vérifier le workflow GitHub Pages et l’URL publique.
 
+
+Publication confirmée : le commit `d5c2c78` est sur la seule branche distante `main`. Le workflow GitHub Pages `32021225138` s’est terminé avec succès et l’URL publique sert le titre Dynastie BITULU.
+
+
+## Audit synchronisation arbre — 2026-08-17
+- [ ] Comparer profils, familles, invitations et relations dans Supabase.
+- [ ] Vérifier les policies RLS et le chemin de chargement frontend de l’arbre.
+- [ ] Documenter la cause exacte et proposer une correction ciblée sans données fictives.
+
+
+## Diagnostic synchronisation arbre — vérifié
+Les huit profils visibles dans Supabase appartiennent à la même famille BITULU. En revanche, `family_relationships` est vide : aucun lien généalogique accepté n’a encore été créé. La dernière invitation `Josémaria Escrivà` est envoyée mais non acceptée ; l’invitation `Marguerite Marie` a été créée avec `family_unit_id = null`. Les policies live de lecture familiale des profils sont présentes. Enfin, le remote GitHub `main` est au commit `d5c2c78`, tandis que le checkpoint local WebDev `a7f210c8` contient les corrections de chargement live ; la version publiée n’est donc pas encore celle qui supprime le cache local et charge les membres par famille.
+
+
+## Rattachement automatique et publication immédiate — 2026-08-17
+- [ ] Structurer la relation famille-profil-invitation avec contraintes et triggers sûrs.
+- [ ] Corriger l’invitation existante sans `family_unit_id` et rattacher les comptes concernés sans données fictives.
+- [ ] Vérifier l’acceptation d’invitation et la création de relation généalogique.
+- [ ] Valider TypeScript/build et publier `main` sur GitHub Pages.
+
+
+Rattachement automatique validé : le trigger `handle_new_user` choisit la famille du token d’invitation, la famille explicitement demandée ou l’unique famille existante ; il refuse désormais un signup ambigu dans une configuration multi-familles. Le trigger `normalize_invitation_family` impose que chaque invitation utilise la famille de son invitant. L’invitation orpheline live a été réparée, aucune invitation ne reste avec `family_unit_id IS NULL`, et le frontend transmet `invitation_token` lors du signup. TypeScript et build passent.
+
