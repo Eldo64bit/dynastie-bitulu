@@ -268,3 +268,14 @@ Les huit profils visibles dans Supabase appartiennent à la même famille BITULU
 
 Rattachement automatique validé : le trigger `handle_new_user` choisit la famille du token d’invitation, la famille explicitement demandée ou l’unique famille existante ; il refuse désormais un signup ambigu dans une configuration multi-familles. Le trigger `normalize_invitation_family` impose que chaque invitation utilise la famille de son invitant. L’invitation orpheline live a été réparée, aucune invitation ne reste avec `family_unit_id IS NULL`, et le frontend transmet `invitation_token` lors du signup. TypeScript et build passent.
 
+
+## Membres visibles, notification et recherche arbre — 2026-08-17
+- [ ] Diagnostiquer pourquoi les membres Supabase ne remontent ni dans la vue générale ni dans l’arbre.
+- [ ] Corriger le chargement live et les policies nécessaires.
+- [ ] Ajouter une notification visuelle lorsqu’un membre rejoint via invitation.
+- [ ] Ajouter une recherche dédiée dans l’arbre.
+- [ ] Valider et publier la correction.
+
+
+La cause de l’arbre vide était confirmée : la policy live `family profiles read` se référençait elle-même via `profiles viewer`, ce qui bloquait la lecture familiale côté client. Elle utilise maintenant `is_member_of_family(family_unit_id)`. `profiles` est également publié dans `supabase_realtime`. Le dashboard ajoute une notification visuelle lors d’un INSERT de profil familial, recharge Supabase sans cache local et propose une recherche dédiée dans l’arbre. TypeScript et build passent.
+

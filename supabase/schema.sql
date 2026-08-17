@@ -305,6 +305,8 @@ create trigger normalize_invitation_family_trigger before insert or update of fa
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();
 
+alter publication supabase_realtime add table public.profiles;
+
 create or replace function public.accept_invitation(p_token text)
 returns jsonb language plpgsql security definer set search_path = public as $$
 declare
@@ -505,7 +507,7 @@ create policy "profile phone delete own" on public.profile_phone_numbers for del
 drop policy if exists "profile update own" on public.profiles;
 create policy "profile update own" on public.profiles for update to authenticated using (id = auth.uid()) with check (id = auth.uid());
 drop policy if exists "family profiles read" on public.profiles;
-create policy "family profiles read" on public.profiles for select to authenticated using (exists (select 1 from public.profiles viewer where viewer.id = auth.uid() and viewer.family_unit_id is not null and viewer.family_unit_id = profiles.family_unit_id));
+create policy "family profiles read" on public.profiles for select to authenticated using (public.is_member_of_family(family_unit_id));
 
 insert into storage.buckets (id, name, public) values ('profile-media', 'profile-media', false) on conflict (id) do update set public = false;
 
