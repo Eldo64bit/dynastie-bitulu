@@ -172,6 +172,9 @@ create table if not exists public.invitations (
 
 alter table public.invitations add column if not exists sent_at timestamptz;
 alter table public.invitations add column if not exists revoked_at timestamptz;
+alter table public.invitations add column if not exists accepted_by uuid references auth.users(id) on delete set null;
+alter table public.invitations add column if not exists accepted_at timestamptz;
+alter table public.profiles add column if not exists background_opacity numeric not null default 0.18 check (background_opacity between 0.05 and 0.8);
 
 alter table public.profiles add column if not exists contact_visibility public.visibility_level not null default 'PRIVATE';
 alter table public.profiles add column if not exists website_url text;
@@ -269,6 +272,88 @@ $$;
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure public.handle_new_user();
+
+create or replace function public.accept_invitation(p_token text)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  invitation_row public.invitations;
+  inviter_profile public.profiles;
+  current_profile public.profiles;
+  relation_from uuid;
+  relation_to uuid;
+  relation_kind text;
+begin
+  if auth.uid() is null then raise exception 'AUTH_REQUIRED'; end if;
+  select * into invitation_row from public.invitations
+    where token = p_token and status = 'PENDING' and revoked_at is null and expires_at > now()
+    for update;
+  if not found then raise exception 'INVITATION_INVALID_OR_EXPIRED'; end if;
+  select * into current_profile from public.profiles where id = auth.uid() for update;
+  select * into inviter_profile from public.profiles where id = invitation_row.inviter_id;
+  if inviter_profile.id is null then raise exception 'INVITER_PROFILE_NOT_FOUND'; end if;
+  if current_profile.family_unit_id is not null and current_profile.family_unit_id <> coalesce(invitation_row.family_unit_id, inviter_profile.family_unit_id) then raise exception 'ALREADY_ATTACHED_TO_ANOTHER_FAMILY'; end if;
+  if invitation_row.family_unit_id is null then
+    invitation_row.family_unit_id := inviter_profile.family_unit_id;
+    update public.invitations set family_unit_id = invitation_row.family_unit_id where id = invitation_row.id;
+  end if;
+  if invitation_row.family_unit_id is null then raise exception 'FAMILY_NOT_FOUND'; end if;
+  update public.profiles set family_unit_id = invitation_row.family_unit_id, role = invitation_row.role, updated_at = now() where id = auth.uid();
+  relation_kind := case invitation_row.relationship_type
+    when 'Conjoint(e)' then 'SPOUSE_OF'
+    when 'Frère ou sœur' then 'SIBLING_OF'
+    when 'Parent' then 'PARENT_OF'
+    when 'Grand-parent' then 'GRANDPARENT_OF'
+    when 'Enfant' then 'PARENT_OF'
+    else 'RELATED_TO'
+  end;
+  if invitation_row.relationship_type in ('Parent','Grand-parent') then
+    relation_from := auth.uid(); relation_to := invitation_row.inviter_id;
+  else
+    relation_from := invitation_row.inviter_id; relation_to := auth.uid();
+  end if;
+  insert into public.family_relationships (family_unit_id, from_profile_id, to_profile_id, relationship_type, created_by)
+    values (invitation_row.family_unit_id, relation_from, relation_to, relation_kind, auth.uid())
+    on conflict (from_profile_id, to_profile_id, relationship_type) do nothing;
+  update public.invitations set status = 'ACCEPTED', accepted_by = auth.uid(), accepted_at = now() where id = invitation_row.id;
+  return jsonb_build_object('family_unit_id', invitation_row.family_unit_id, 'invitation_id', invitation_row.id, 'relationship_type', relation_kind);
+end;
+$$;
+
+create or replace function public.ensure_family_membership()
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  current_profile public.profiles;
+  family_id uuid;
+  matching_invitation public.invitations;
+  relation_from uuid;
+  relation_to uuid;
+  relation_kind text;
+begin
+  if auth.uid() is null then raise exception 'AUTH_REQUIRED'; end if;
+  select * into current_profile from public.profiles where id = auth.uid() for update;
+  family_id := current_profile.family_unit_id;
+  if family_id is null then
+    select id into family_id from public.family_units order by created_at asc limit 1;
+    if family_id is null then raise exception 'FAMILY_NOT_FOUND'; end if;
+  end if;
+  select * into matching_invitation from public.invitations
+    where family_unit_id = family_id and status = 'PENDING' and revoked_at is null
+      and sent_at is not null
+      and regexp_replace(lower(coalesce(invitee_first_name,'') || coalesce(invitee_last_name,'')), '[^a-z0-9]', '', 'g') = regexp_replace(lower(coalesce(current_profile.first_name,'') || coalesce(current_profile.last_name,'')), '[^a-z0-9]', '', 'g')
+    order by created_at desc limit 1;
+  if current_profile.family_unit_id is null then update public.profiles set family_unit_id = family_id, updated_at = now() where id = auth.uid(); end if;
+  if matching_invitation.id is not null and (select count(*) from public.profiles p where p.family_unit_id = family_id and regexp_replace(lower(coalesce(p.first_name,'') || coalesce(p.last_name,'')), '[^a-z0-9]', '', 'g') = regexp_replace(lower(coalesce(matching_invitation.invitee_first_name,'') || coalesce(matching_invitation.invitee_last_name,'')), '[^a-z0-9]', '', 'g')) = 1 then
+    relation_kind := case matching_invitation.relationship_type when 'Conjoint(e)' then 'SPOUSE_OF' when 'Frère ou sœur' then 'SIBLING_OF' when 'Parent' then 'PARENT_OF' when 'Grand-parent' then 'GRANDPARENT_OF' when 'Enfant' then 'PARENT_OF' else 'RELATED_TO' end;
+    if matching_invitation.relationship_type in ('Parent','Grand-parent') then relation_from := auth.uid(); relation_to := matching_invitation.inviter_id; else relation_from := matching_invitation.inviter_id; relation_to := auth.uid(); end if;
+    insert into public.family_relationships (family_unit_id, from_profile_id, to_profile_id, relationship_type, created_by) values (family_id, relation_from, relation_to, relation_kind, auth.uid()) on conflict (from_profile_id, to_profile_id, relationship_type) do nothing;
+    update public.invitations set status = 'ACCEPTED', accepted_by = auth.uid(), accepted_at = now() where id = matching_invitation.id;
+    return jsonb_build_object('family_unit_id', family_id, 'status', 'joined_and_linked', 'invitation_id', matching_invitation.id);
+  end if;
+  return jsonb_build_object('family_unit_id', family_id, 'status', case when current_profile.family_unit_id is null then 'joined_single_family' else 'already_member' end);
+end;
+$$;
+revoke all on function public.ensure_family_membership() from public;
+grant execute on function public.ensure_family_membership() to authenticated;
 
 alter table public.family_units enable row level security;
 alter table public.profiles enable row level security;
@@ -437,10 +522,14 @@ create table if not exists public.media (id uuid primary key default gen_random_
 alter table public.media enable row level security;
 drop policy if exists "own media" on public.media;
 create policy "own media" on public.media for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+drop policy if exists "family media read" on public.media;
+create policy "family media read" on public.media for select to authenticated using (visibility = 'PUBLIC' or exists (select 1 from public.profiles p where p.id = auth.uid() and p.family_unit_id = media.family_unit_id));
 create table if not exists public.documents (id uuid primary key default gen_random_uuid(), family_unit_id uuid references public.family_units(id) on delete cascade, owner_id uuid not null references auth.users(id) on delete cascade, document_type text not null default 'OTHER', title text not null, storage_path text not null, mime_type text, visibility text not null default 'PRIVATE', created_at timestamptz not null default now());
 alter table public.documents enable row level security;
 drop policy if exists "own documents" on public.documents;
 create policy "own documents" on public.documents for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+drop policy if exists "family documents read" on public.documents;
+create policy "family documents read" on public.documents for select to authenticated using (visibility = 'PUBLIC' or exists (select 1 from public.profiles p where p.id = auth.uid() and p.family_unit_id = documents.family_unit_id));
 
 
 create table if not exists public.profile_contact_points (
@@ -468,6 +557,8 @@ create policy "contact points delete own" on public.profile_contact_points for d
 alter table public.albums enable row level security;
 drop policy if exists "own albums" on public.albums;
 create policy "own albums" on public.albums for all to authenticated using (owner_id = auth.uid()) with check (owner_id = auth.uid());
+drop policy if exists "family albums read" on public.albums;
+create policy "family albums read" on public.albums for select to authenticated using (visibility = 'PUBLIC' or exists (select 1 from public.profiles p where p.id = auth.uid() and p.family_unit_id = albums.family_unit_id));
 drop policy if exists "family media read own" on storage.objects;
 create policy "family media read own" on storage.objects for select to authenticated using (bucket_id = 'family-media' and (storage.foldername(name))[1] = auth.uid()::text);
 drop policy if exists "family media upload own" on storage.objects;

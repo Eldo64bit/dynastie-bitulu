@@ -208,3 +208,21 @@ La base réelle contient maintenant `profile_phone_numbers`, les policies RLS de
 - [x] Vérifier l’affichage invité, TypeScript et le build.
 - [ ] Créer un checkpoint de la fonctionnalité.
 
+
+## Synchronisation familiale et opacité d’arrière-plan — 2026-08-17
+- [ ] Auditer le rattachement des profils, invitations et familles dans Supabase.
+- [ ] Corriger l’acceptation d’invitation, le rattachement familial et la visibilité cohérente des contenus.
+- [ ] Ajouter un slider custom pour l’opacité de l’arrière-plan et persister sa valeur.
+- [ ] Valider les parcours membres/invités, TypeScript et le build.
+- [ ] Créer un checkpoint de la correction.
+
+
+## Synchronisation familiale et opacité d’arrière-plan — 2026-08-17
+- [x] Auditer le rattachement des profils, invitations et familles dans Supabase.
+- [x] Restaurer `family_relationships`, ses policies RLS et la fonction `is_member_of_family` manquantes en live.
+- [x] Rattacher les profils existants à l’unique espace `Dynastie BITULU` et rattacher les contenus historiques à la famille de leur propriétaire.
+- [x] Déployer `accept_invitation` et `ensure_family_membership` pour accepter un lien WhatsApp, rattacher le compte et créer la relation généalogique sans doublon ambigu.
+- [x] Ajouter un slider d’opacité custom, accessible au clavier et au pointeur, avec persistance dans `profiles.background_opacity`.
+- [x] Valider TypeScript, le build et l’aperçu de l’accueil ainsi que le parcours URL d’invitation.
+- [ ] Créer le checkpoint de cette correction.
+
