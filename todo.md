@@ -288,3 +288,12 @@ La cause de l’arbre vide était confirmée : la policy live `family profiles r
 
 Validation terminée : la notification d’arrivée charge l’avatar Supabase signé du nouveau membre avec fallback initiales ; le slider custom utilise pointer capture et pointer move pour le glissement continu, avec un pas clavier et une précision de 0,0001 %. TypeScript, build et aperçu passent.
 
+
+## Publication et arbre avancé — 2026-08-17
+- [ ] Publier immédiatement la version actuelle sur `main`.
+- [ ] Afficher l’opacité à l’unité tout en gardant le pas interne de 0,0001 %.
+- [ ] Ajouter une vue détaillée complète au clic sur un membre.
+- [ ] Renforcer l’édition avatar/profil et l’aperçu direct de l’arrière-plan.
+- [ ] Ajouter le réagencement Drag&Drop des membres réservé au superadmin.
+- [ ] Valider et republier la version finale.
+
