@@ -279,3 +279,12 @@ Rattachement automatique validé : le trigger `handle_new_user` choisit la famil
 
 La cause de l’arbre vide était confirmée : la policy live `family profiles read` se référençait elle-même via `profiles viewer`, ce qui bloquait la lecture familiale côté client. Elle utilise maintenant `is_member_of_family(family_unit_id)`. `profiles` est également publié dans `supabase_realtime`. Le dashboard ajoute une notification visuelle lors d’un INSERT de profil familial, recharge Supabase sans cache local et propose une recherche dédiée dans l’arbre. TypeScript et build passent.
 
+
+## Notification portrait, slider glissant et publication — 2026-08-17
+- [ ] Afficher le portrait du nouveau membre dans la notification d’arrivée.
+- [ ] Rendre le slider d’opacité glissable au pointeur avec une précision de 0,0001 %.
+- [ ] Valider, créer le checkpoint et publier sur GitHub Pages.
+
+
+Validation terminée : la notification d’arrivée charge l’avatar Supabase signé du nouveau membre avec fallback initiales ; le slider custom utilise pointer capture et pointer move pour le glissement continu, avec un pas clavier et une précision de 0,0001 %. TypeScript, build et aperçu passent.
+
