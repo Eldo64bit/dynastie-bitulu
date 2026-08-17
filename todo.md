@@ -240,3 +240,8 @@ La policy `family profiles read` a été restaurée dans Supabase : les profils 
 
 - [ ] Créer le checkpoint de cette correction.
 
+
+## Publication du checkpoint a7f210c8 — 2026-08-17
+- [ ] Pousser le checkpoint validé sur `main`.
+- [ ] Vérifier le workflow GitHub Pages et l’URL publique.
+
